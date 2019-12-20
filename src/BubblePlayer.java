@@ -70,6 +70,10 @@ public class BubblePlayer extends Thread   {
 	public int getY() {
 		return y;
 	}
+	
+	public int getSize() {
+		return size;
+	}
 
 	public void setY(int y) {
 		this.y = y;

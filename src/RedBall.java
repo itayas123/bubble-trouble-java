@@ -5,9 +5,6 @@ import javax.swing.ImageIcon;
 
 public class RedBall extends Thread  {
 
-	
-	final int BALL_SPEED = 12;
-
 	private GamePanel panel;
 	private Image ballImage;
 	private int x, y, size, dx, dy;

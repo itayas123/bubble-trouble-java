@@ -19,6 +19,7 @@ public class GamePanel  extends JPanel{
 	private BubblePlayer player;
 	private RedBall redBall;
 	private RedBall redBall2;
+	private Bow bow;
 	private Image backGroundImage;
 	private JFrame jf;
 
@@ -36,7 +37,7 @@ public class GamePanel  extends JPanel{
 		player = new BubblePlayer(this);
 		redBall = new RedBall(this, this.getWidth() + 30);
 		redBall2 = new RedBall(this, 30);
-		addKeyListener(new KL ());
+		addKeyListener(new KL (this));
 		setFocusable(true);
 	}
 	
@@ -49,6 +50,10 @@ public class GamePanel  extends JPanel{
 		player.draw(g);
 		redBall.draw(g);
 		redBall2.draw(g);
+		
+		if (bow != null && bow.isAlive()) {
+			bow.draw(g);
+		}
 	}
 	
 	public void  hideMouseCursor(){
@@ -73,6 +78,10 @@ public class GamePanel  extends JPanel{
 	
 	 class KL extends KeyAdapter
      {
+		 private GamePanel panel;
+		 public KL(GamePanel panel) {
+			 this.panel = panel;
+		 }
 		public void keyPressed(KeyEvent e)
 		{
 			switch (e.getKeyCode()) {
@@ -81,6 +90,9 @@ public class GamePanel  extends JPanel{
 				break;
 			case KeyEvent.VK_RIGHT:
 				player.move(false);
+				break;
+			case KeyEvent.VK_SPACE:
+				bow = new Bow(this.panel, player);
 				break;
 			case KeyEvent.VK_ESCAPE:
 				jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
