@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 public class GamePanel  extends JPanel{
 
 	private BubblePlayer player;
+	private RedBall redBall;
+	private RedBall redBall2;
 	private Image backGroundImage;
 	private JFrame jf;
 
@@ -32,7 +34,8 @@ public class GamePanel  extends JPanel{
 		this.width = (int) (gd.getDisplayMode().getWidth() * 0.8);
 		this.height = (int) (gd.getDisplayMode().getHeight() * 0.8);
 		player = new BubblePlayer(this);
-		
+		redBall = new RedBall(this, this.getWidth() + 30);
+		redBall2 = new RedBall(this, 30);
 		addKeyListener(new KL ());
 		setFocusable(true);
 	}
@@ -44,6 +47,8 @@ public class GamePanel  extends JPanel{
 		
 		g.drawImage(this.backGroundImage, 0,0,this.width,this.height, null);
 		player.draw(g);
+		redBall.draw(g);
+		redBall2.draw(g);
 	}
 	
 	public void  hideMouseCursor(){
