@@ -8,7 +8,7 @@ public class RedBall extends Thread  {
 	private GamePanel panel;
 	private Image ballImage;
 	private int x, y, size, dx, dy;
-	private boolean isPaused;
+	private boolean isPaused, doBreak;
 
 	public RedBall(GamePanel panel, int x)
 	{
@@ -18,7 +18,7 @@ public class RedBall extends Thread  {
 		this.y = 200;
 		this.dx = -10;
 		this.dy = 10;
-		this.isPaused = false;
+		this.isPaused = this.doBreak = false;
 		ImageIcon img = new ImageIcon("images/Red_Ball.png");
 		this.ballImage = img.getImage();
 		start();
@@ -37,6 +37,9 @@ public class RedBall extends Thread  {
 		    }
 		    this.move();
 			panel.repaint();
+			if (this.doBreak) {
+				break;
+			}
 		}	
 	}
 	
@@ -57,10 +60,38 @@ public class RedBall extends Thread  {
 		} else if (this.x <= 30){
 			this.dx = 5;
 		}
+		this.collision();
+	}
+	
+	public void collision() {
+		Bow bow = this.panel.bow;
+		if (bow != null && bow.isAlive()) {
+			int mxBall = this.getMiddleX();
+			int myBall = this.getMiddleY();
+			int largex = bow.getX() - this.getRadius();
+			int largey = bow.getY() - this.getRadius();
+			int w = bow.getSizex() + (2 * this.getRadius());
+			int h = bow.getSizey() + (2 * this.getRadius());
+			if(( (mxBall >= largex) && (mxBall <= largex + w)) && ( (myBall >= largey) && (myBall <= largey + h) ) ) {
+				this.doBreak = true;
+			}
+		}
 	}
 	
 	public boolean isPaused() {
 		return isPaused;
+	}
+	
+	public int getRadius() {
+		return this.size/2;
+	}
+	
+	public int getMiddleX() {
+		return this.x + this.getRadius();
+	}
+	
+	public int getMiddleY() {
+		return this.y + this.getRadius();
 	}
 
 	public void setPaused(boolean isPaused) {

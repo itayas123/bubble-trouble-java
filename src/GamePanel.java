@@ -17,9 +17,9 @@ import javax.swing.JPanel;
 public class GamePanel  extends JPanel{
 
 	private BubblePlayer player;
-	private RedBall redBall;
-	private RedBall redBall2;
-	private Bow bow;
+	public RedBall redBall;
+	public RedBall redBall2;
+	public Bow bow;
 	private Image backGroundImage;
 	private JFrame jf;
 
@@ -48,12 +48,16 @@ public class GamePanel  extends JPanel{
 		
 		g.drawImage(this.backGroundImage, 0,0,this.width,this.height, null);
 		player.draw(g);
-		redBall.draw(g);
-		redBall2.draw(g);
-		
+		if(redBall.isAlive()) {
+			redBall.draw(g);
+		}
+		if(redBall2.isAlive()) {
+			redBall2.draw(g);
+		}		
 		if (bow != null && bow.isAlive()) {
 			bow.draw(g);
 		}
+		
 	}
 	
 	public void  hideMouseCursor(){

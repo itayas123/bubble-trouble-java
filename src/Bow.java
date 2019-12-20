@@ -13,7 +13,7 @@ public class Bow extends Thread {
 	public Bow(GamePanel panel, BubblePlayer player)
 	{
 		this.panel= panel;
-		this.sizex = this.sizey = 30;
+		this.sizex = this.sizey = 35;
 		this.x = player.getX() + (player.getSize() / 2) - (this.sizex / 2);
 		this.y = player.getY() - this.sizey;
 		this.dy = 10;
@@ -47,7 +47,19 @@ public class Bow extends Thread {
 		g.drawImage(this.bowImage, this.x,this.y,this.sizex,this.sizey, null);
 	}
 	
-	public int getSizeY() {
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public int getSizex() {
+		return sizex;
+	}
+
+	public int getSizey() {
 		return sizey;
 	}
 	
