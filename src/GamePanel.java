@@ -9,6 +9,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -16,10 +18,10 @@ import javax.swing.JPanel;
 
 public class GamePanel  extends JPanel{
 
-	private BubblePlayer player;
-	public RedBall redBall;
-	public RedBall redBall2;
+	public BubblePlayer player;
+	public List<RedBall> redBalls = new ArrayList<RedBall>();
 	public Bow bow;
+	public boolean isPaused;
 	private Image backGroundImage;
 	private JFrame jf;
 
@@ -34,9 +36,14 @@ public class GamePanel  extends JPanel{
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		this.width = (int) (gd.getDisplayMode().getWidth() * 0.8);
 		this.height = (int) (gd.getDisplayMode().getHeight() * 0.8);
+		isPaused = false;
 		player = new BubblePlayer(this);
-		redBall = new RedBall(this, this.getWidth() + 30);
-		redBall2 = new RedBall(this, 30);
+		for(int i=0; i<2; i++) {
+			int x = 30;
+			if(i%2==0)
+				x += this.getWidth();
+			redBalls.add(new RedBall(this,x,230, 100, true));		
+		}
 		addKeyListener(new KL (this));
 		setFocusable(true);
 	}
@@ -48,15 +55,15 @@ public class GamePanel  extends JPanel{
 		
 		g.drawImage(this.backGroundImage, 0,0,this.width,this.height, null);
 		player.draw(g);
-		if(redBall.isAlive()) {
-			redBall.draw(g);
+		
+		for(int i=0; i< redBalls.size(); i++) {
+			RedBall ball = redBalls.get(i);
+			if(ball != null && ball.isAlive() && !ball.doBreak)
+				ball.draw(g);
 		}
-		if(redBall2.isAlive()) {
-			redBall2.draw(g);
-		}		
-		if (bow != null && bow.isAlive()) {
+		
+		if (bow != null && bow.isAlive())
 			bow.draw(g);
-		}
 		
 	}
 	
@@ -96,7 +103,8 @@ public class GamePanel  extends JPanel{
 				player.move(false);
 				break;
 			case KeyEvent.VK_SPACE:
-				bow = new Bow(this.panel, player);
+				if(bow == null || (bow != null && !bow.isAlive()))
+					bow = new Bow(this.panel, player);
 				break;
 			case KeyEvent.VK_ESCAPE:
 				jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));

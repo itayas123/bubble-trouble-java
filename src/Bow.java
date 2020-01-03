@@ -8,7 +8,7 @@ public class Bow extends Thread {
 	private GamePanel panel;
 	private Image bowImage;
 	private int x, y, sizex,sizey, dy;
-	private boolean isPaused;
+	boolean doBreak;
 
 	public Bow(GamePanel panel, BubblePlayer player)
 	{
@@ -17,7 +17,7 @@ public class Bow extends Thread {
 		this.x = player.getX() + (player.getSize() / 2) - (this.sizex / 2);
 		this.y = player.getY() - this.sizey;
 		this.dy = 10;
-		this.isPaused = false;
+		this.doBreak = false;
 		ImageIcon img = new ImageIcon("images/Bow.png");
 		this.bowImage = img.getImage();
 		start();
@@ -25,9 +25,18 @@ public class Bow extends Thread {
 	
 	public void run()
 	{
-		while(true)
+		while(!doBreak)
 		{
-		
+			if(this.panel.isPaused) {
+				synchronized (this) {
+					try {
+						wait();
+					}catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						 e.printStackTrace();
+					    }
+				}
+			}
 		   try {
 			Thread.sleep(20); 
 		      } catch (InterruptedException e) {
@@ -61,14 +70,6 @@ public class Bow extends Thread {
 
 	public int getSizey() {
 		return sizey;
-	}
-	
-	public boolean isPaused() {
-		return isPaused;
-	}
-
-	public void setPaused(boolean isPaused) {
-		this.isPaused = isPaused;
 	}
 
 }

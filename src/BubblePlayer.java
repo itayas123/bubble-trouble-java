@@ -10,7 +10,6 @@ public class BubblePlayer extends Thread   {
 	private GamePanel panel;
 	private Image playerImage;
 	private int x, y, size;
-	private boolean isPaused;
 	private ImageIcon B, L, R;
 
 	public BubblePlayer(GamePanel panel)
@@ -19,7 +18,6 @@ public class BubblePlayer extends Thread   {
 		this.size = 100;
 		this.x = (panel.getWidth()/2) - this.size + 50;
 		this.y = panel.getHeight() - this.size - 30;
-		this.isPaused = false;
 		this.B = new ImageIcon("images/Man_B.png");
 		this.L = new ImageIcon("images/Man_L.png");
 		this.R = new ImageIcon("images/Man_R.png");
@@ -31,7 +29,16 @@ public class BubblePlayer extends Thread   {
 	{
 		while(true)
 		{
-		
+			if(this.panel.isPaused) {
+				synchronized (this) {
+					try {
+						wait();
+					}catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						 e.printStackTrace();
+					    }
+				}
+			}
 		   try {
 			Thread.sleep(20);
 		      } catch (InterruptedException e) {
@@ -39,6 +46,7 @@ public class BubblePlayer extends Thread   {
 			 e.printStackTrace();
 		    }
 			panel.repaint();
+			
 		}	
 	}
 	
@@ -77,13 +85,5 @@ public class BubblePlayer extends Thread   {
 
 	public void setY(int y) {
 		this.y = y;
-	}
-
-	public boolean isPaused() {
-		return isPaused;
-	}
-
-	public void setPaused(boolean isPaused) {
-		this.isPaused = isPaused;
 	}
 }

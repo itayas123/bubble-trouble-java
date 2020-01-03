@@ -8,17 +8,17 @@ public class RedBall extends Thread  {
 	private GamePanel panel;
 	private Image ballImage;
 	private int x, y, size, dx, dy;
-	private boolean isPaused, doBreak;
+	boolean doBreak;
 
-	public RedBall(GamePanel panel, int x)
+	public RedBall(GamePanel panel, int x, int y, int size, boolean direction)
 	{
 		this.panel= panel;
-		this.size = 100;
-		this.x = x- this.size;
-		this.y = 200;
-		this.dx = -10;
+		this.size = size;
+		this.x = x - this.size;
+		this.y = y - this.size;
+		this.dx = direction ? 10 : -10;
 		this.dy = 10;
-		this.isPaused = this.doBreak = false;
+		this.doBreak = false;
 		ImageIcon img = new ImageIcon("images/Red_Ball.png");
 		this.ballImage = img.getImage();
 		start();
@@ -26,9 +26,18 @@ public class RedBall extends Thread  {
 	
 	public void run()
 	{
-		while(true)
+		while(!doBreak)
 		{
-		
+			if(this.panel.isPaused) {
+				synchronized (this) {
+					try {
+						wait();
+					}catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						 e.printStackTrace();
+					    }
+				}
+			}
 		   try {
 			Thread.sleep(20);
 		      } catch (InterruptedException e) {
@@ -36,10 +45,18 @@ public class RedBall extends Thread  {
 			 e.printStackTrace();
 		    }
 		    this.move();
+		    this.bowCollision();
+		    if(doBreak) {
+		    	if(this.getRadius() > 20) {
+					panel.redBalls.add(new RedBall(panel,this.getMiddleX(),this.getMiddleY(), this.getRadius(), true));
+					panel.redBalls.add(new RedBall(panel,this.getMiddleX(),this.getMiddleY(), this.getRadius(), false));
+		    	}
+					int index = panel.redBalls.indexOf(this);
+					if (index != -1)
+						panel.redBalls.remove(index);
+		    }
+			this.playerCollision();
 			panel.repaint();
-			if (this.doBreak) {
-				break;
-			}
 		}	
 	}
 	
@@ -60,10 +77,9 @@ public class RedBall extends Thread  {
 		} else if (this.x <= 30){
 			this.dx = 5;
 		}
-		this.collision();
 	}
 	
-	public void collision() {
+	public void bowCollision() {
 		Bow bow = this.panel.bow;
 		if (bow != null && bow.isAlive()) {
 			int mxBall = this.getMiddleX();
@@ -74,12 +90,24 @@ public class RedBall extends Thread  {
 			int h = bow.getSizey() + (2 * this.getRadius());
 			if(( (mxBall >= largex) && (mxBall <= largex + w)) && ( (myBall >= largey) && (myBall <= largey + h) ) ) {
 				this.doBreak = true;
+				bow.doBreak = true;
 			}
 		}
 	}
 	
-	public boolean isPaused() {
-		return isPaused;
+	public void playerCollision() {
+		BubblePlayer player = this.panel.player;
+		if (player != null && player.isAlive()) {
+			int mxBall = this.getMiddleX();
+			int myBall = this.getMiddleY();
+			int largex = player.getX() - this.getRadius();
+			int largey = player.getY() - this.getRadius();
+			int w = player.getSize() + (2 * this.getRadius());
+			int h = player.getSize() + (2 * this.getRadius());
+			if(( (mxBall >= largex) && (mxBall <= largex + w)) && ( (myBall >= largey) && (myBall <= largey + h) ) ) {
+				this.panel.isPaused = true;
+			}
+		}
 	}
 	
 	public int getRadius() {
@@ -92,9 +120,5 @@ public class RedBall extends Thread  {
 	
 	public int getMiddleY() {
 		return this.y + this.getRadius();
-	}
-
-	public void setPaused(boolean isPaused) {
-		this.isPaused = isPaused;
 	}
 }
