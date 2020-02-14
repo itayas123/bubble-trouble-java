@@ -14,7 +14,7 @@ public class Bow extends Thread {
 		this.panel = panel;
 		this.sizex = this.sizey = 15;
 		this.x = player.getX() + (player.getWidth() / 2) - (this.sizex / 2);
-		this.y = player.getY() - this.sizey;
+		this.y = panel.height - panel.FRAME_SIZE - 10;
 		this.dy = 15;
 		this.doBreak = false;
 		ImageIcon img = new ImageIcon("images/Bow.png");
@@ -37,7 +37,7 @@ public class Bow extends Thread {
 			this.sizey += this.dy;
 			this.y -= this.dy;
 			panel.repaint();
-			if ((this.sizey - this.y) >= (this.panel.getHeight() - 30)) {
+			if ((this.sizey - this.y) >= (this.panel.getHeight() - panel.FRAME_SIZE)) {
 				break;
 			}
 		}

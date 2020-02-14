@@ -19,7 +19,7 @@ public class BubblePlayer extends Thread {
 		this.width = 80;
 		this.moveLeft = this.moveRight = false;
 		this.x = (panel.getWidth() / 2) - this.width + 50;
-		this.y = panel.getHeight() - this.height - 30;
+		this.y = panel.getHeight() - this.height - panel.FRAME_SIZE;
 		this.B = new ImageIcon("images/Man_B.png");
 		this.L = new ImageIcon("images/Man_L.png");
 		this.R = new ImageIcon("images/Man_R.png");
@@ -54,11 +54,11 @@ public class BubblePlayer extends Thread {
 	}
 
 	public void move() {
-		if (this.moveLeft && this.x > 30) {
+		if (this.moveLeft && this.x > panel.FRAME_SIZE) {
 			this.x -= PLAYER_SPEED;
 			this.playerImage = this.L.getImage();
 		} 
-		if (this.moveRight && this.x < panel.getWidth() - this.width - 30) {
+		if (this.moveRight && this.x < panel.getWidth() - this.width - panel.FRAME_SIZE) {
 			this.x += PLAYER_SPEED;
 			this.playerImage = this.R.getImage();
 		}

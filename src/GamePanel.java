@@ -16,8 +16,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+
 public class GamePanel extends JPanel {
 
+	final int FRAME_SIZE = 30;
+	
 	public BubblePlayer player;
 	public List<RedBall> redBalls = new ArrayList<RedBall>();
 	public Bow bow;
@@ -39,13 +42,28 @@ public class GamePanel extends JPanel {
 		isPaused = false;
 		player = new BubblePlayer(this);
 		for (int i = 0; i < 2; i++) {
-			int x = 30;
+			int x = FRAME_SIZE;
 			if (i % 2 == 0)
 				x += this.getWidth();
 			redBalls.add(new RedBall(this, x, 230, 100, true));
 		}
 		addKeyListener(new KL(this));
 		setFocusable(true);
+	}
+	
+	public void startOver() {
+		this.isPaused = false;
+		redBalls.clear();
+		for (int i = 0; i < 2; i++) {
+			int x = FRAME_SIZE;
+			if (i % 2 == 0)
+				x += this.getWidth();
+			redBalls.add(new RedBall(this, x, 230, 100, true));
+		}
+		synchronized (player) {
+			player.notify();
+			player = new BubblePlayer(this);
+		}
 	}
 
 	public void paintComponent(Graphics g) {
@@ -61,8 +79,10 @@ public class GamePanel extends JPanel {
 				ball.draw(g);
 		}
 
-		if (bow != null && bow.isAlive())
+		if (bow != null && bow.isAlive()) {
 			bow.draw(g);
+		    player.draw(g);
+		}
 
 	}
 
@@ -107,6 +127,10 @@ public class GamePanel extends JPanel {
 			case KeyEvent.VK_ESCAPE:
 				jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
 				break;
+			case KeyEvent.VK_ENTER:
+				if(this.panel.isPaused) {
+					startOver();
+				}
 			default:
 				break;
 			}

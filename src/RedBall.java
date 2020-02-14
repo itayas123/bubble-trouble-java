@@ -61,14 +61,14 @@ public class RedBall extends Thread {
 	public void move() {
 		this.x += this.a;
 		this.y += this.b;
-		if ((this.y + this.size) >= (this.panel.getHeight() - 30)) {
+		if ((this.y + this.size) >= (this.panel.getHeight() - panel.FRAME_SIZE)) {
 			this.b = -7;
-		} else if (this.y <= 30) {
+		} else if (this.y <= panel.FRAME_SIZE) {
 			this.b = 7;
 		}
-		if ((this.x + this.size) >= (this.panel.getWidth() - 30)) {
+		if ((this.x + this.size) >= (this.panel.getWidth() - panel.FRAME_SIZE)) {
 			this.a = -5;
-		} else if (this.x <= 30) {
+		} else if (this.x <= panel.FRAME_SIZE) {
 			this.a = 5;
 		}
 	}
