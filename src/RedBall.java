@@ -15,8 +15,8 @@ public class RedBall extends Thread {
 		this.size = size;
 		this.x = x - this.size;
 		this.y = y - this.size;
-		this.a = direction ? 10 : -10;
-		this.b = 10;
+		this.a = direction ? 5 : -5;
+		this.b = 7;
 		this.doBreak = false;
 		ImageIcon img = new ImageIcon("images/Red_Ball.png");
 		this.ballImage = img.getImage();
@@ -62,9 +62,9 @@ public class RedBall extends Thread {
 		this.x += this.a;
 		this.y += this.b;
 		if ((this.y + this.size) >= (this.panel.getHeight() - 30)) {
-			this.b = -10;
+			this.b = -7;
 		} else if (this.y <= 30) {
-			this.b = 10;
+			this.b = 7;
 		}
 		if ((this.x + this.size) >= (this.panel.getWidth() - 30)) {
 			this.a = -5;
@@ -83,8 +83,8 @@ public class RedBall extends Thread {
 			int w = bow.getSizex() + (2 * this.getRadius());
 			int h = bow.getSizey() + (2 * this.getRadius());
 			if (((mxBall >= largex) && (mxBall <= largex + w)) && ((myBall >= largey) && (myBall <= largey + h))) {
-				this.doBreak = true;
 				bow.doBreak = true;
+				this.doBreak = true;
 			}
 		}
 	}
@@ -96,8 +96,8 @@ public class RedBall extends Thread {
 			int myBall = this.getMiddleY();
 			int largex = player.getX() - this.getRadius();
 			int largey = player.getY() - this.getRadius();
-			int w = player.getSize() + (2 * this.getRadius());
-			int h = player.getSize() + (2 * this.getRadius());
+			int w = ((int)(player.getWidth() * 0.8)) + (2 * this.getRadius());
+			int h = ((int)(player.getHeight() * 0.8)) + (2 * this.getRadius());
 			if (((mxBall >= largex) && (mxBall <= largex + w)) && ((myBall >= largey) && (myBall <= largey + h))) {
 				this.panel.isPaused = true;
 			}

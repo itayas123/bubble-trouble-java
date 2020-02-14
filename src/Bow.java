@@ -12,10 +12,10 @@ public class Bow extends Thread {
 
 	public Bow(GamePanel panel, BubblePlayer player) {
 		this.panel = panel;
-		this.sizex = this.sizey = 35;
-		this.x = player.getX() + (player.getSize() / 2) - (this.sizex / 2);
+		this.sizex = this.sizey = 15;
+		this.x = player.getX() + (player.getWidth() / 2) - (this.sizex / 2);
 		this.y = player.getY() - this.sizey;
-		this.dy = 10;
+		this.dy = 15;
 		this.doBreak = false;
 		ImageIcon img = new ImageIcon("images/Bow.png");
 		this.bowImage = img.getImage();

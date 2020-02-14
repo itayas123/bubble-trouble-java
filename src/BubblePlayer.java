@@ -9,14 +9,17 @@ public class BubblePlayer extends Thread {
 
 	private GamePanel panel;
 	private Image playerImage;
-	private int x, y, size;
+	private int x, y, width, height;
 	private ImageIcon B, L, R;
+	private boolean moveLeft, moveRight;
 
 	public BubblePlayer(GamePanel panel) {
 		this.panel = panel;
-		this.size = 100;
-		this.x = (panel.getWidth() / 2) - this.size + 50;
-		this.y = panel.getHeight() - this.size - 30;
+		this.height = 100;
+		this.width = 80;
+		this.moveLeft = this.moveRight = false;
+		this.x = (panel.getWidth() / 2) - this.width + 50;
+		this.y = panel.getHeight() - this.height - 30;
 		this.B = new ImageIcon("images/Man_B.png");
 		this.L = new ImageIcon("images/Man_L.png");
 		this.R = new ImageIcon("images/Man_R.png");
@@ -36,26 +39,28 @@ public class BubblePlayer extends Thread {
 				}
 			}
 			try {
-				Thread.sleep(20);
+				Thread.sleep(35);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			this.move();
 			panel.repaint();
 
 		}
 	}
 
 	public void draw(Graphics g) {
-		g.drawImage(this.playerImage, this.x, this.y, this.size, this.size, null);
+		g.drawImage(this.playerImage, this.x, this.y, this.width, this.height, null);
 	}
 
-	public void move(boolean left) {
-		if (left && this.x > 30) {
-			this.playerImage = this.L.getImage();
+	public void move() {
+		if (this.moveLeft && this.x > 30) {
 			this.x -= PLAYER_SPEED;
-		} else if (!left && this.x < panel.getWidth() - this.size - 30) {
-			this.playerImage = this.R.getImage();
+			this.playerImage = this.L.getImage();
+		} 
+		if (this.moveRight && this.x < panel.getWidth() - this.width - 30) {
 			this.x += PLAYER_SPEED;
+			this.playerImage = this.R.getImage();
 		}
 	}
 
@@ -70,13 +75,25 @@ public class BubblePlayer extends Thread {
 	public void setX(int x) {
 		this.x = x;
 	}
+	
+	public void setMoveLeft(boolean moveLeft) {
+		this.moveLeft = moveLeft;
+	}
+	
+	public void setMoveRight(boolean moveRight) {
+		this.moveRight = moveRight;
+	}
 
 	public int getY() {
 		return y;
 	}
 
-	public int getSize() {
-		return size;
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
 	}
 
 	public void setY(int y) {

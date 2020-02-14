@@ -95,10 +95,10 @@ public class GamePanel extends JPanel {
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_LEFT:
-				player.move(true);
+				player.setMoveLeft(true);
 				break;
 			case KeyEvent.VK_RIGHT:
-				player.move(false);
+				player.setMoveRight(true);
 				break;
 			case KeyEvent.VK_SPACE:
 				if (bow == null || (bow != null && !bow.isAlive()))
@@ -115,7 +115,11 @@ public class GamePanel extends JPanel {
 		public void keyReleased(KeyEvent e) {
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_LEFT:
+				player.setMoveLeft(false);
+				player.setDefaultImg();
+				break;
 			case KeyEvent.VK_RIGHT:
+				player.setMoveRight(false);
 				player.setDefaultImg();
 				break;
 			default:
@@ -137,11 +141,11 @@ public class GamePanel extends JPanel {
 		jframe.setFocusable(false);
 		gp.hideMouseCursor();
 
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 }
