@@ -39,12 +39,14 @@ public class RedBall extends Thread {
 			this.move();
 			this.bowCollision();
 			if (doBreak) {
+				// add 2 balls from the ball that killed
 				if (this.getRadius() > 20) {
 					panel.redBalls
 							.add(new RedBall(panel, this.getMiddleX(), this.getMiddleY(), this.getRadius(), true));
 					panel.redBalls
 							.add(new RedBall(panel, this.getMiddleX(), this.getMiddleY(), this.getRadius(), false));
 				}
+				// remove the killed ball
 				int index = panel.redBalls.indexOf(this);
 				if (index != -1)
 					panel.redBalls.remove(index);
@@ -96,8 +98,8 @@ public class RedBall extends Thread {
 			int myBall = this.getMiddleY();
 			int largex = player.getX() - this.getRadius();
 			int largey = player.getY() - this.getRadius();
-			int w = ((int)(player.getWidth() * 0.8)) + (2 * this.getRadius());
-			int h = ((int)(player.getHeight() * 0.8)) + (2 * this.getRadius());
+			int w = ((int) (player.getWidth() * 0.8)) + (2 * this.getRadius());
+			int h = ((int) (player.getHeight() * 0.8)) + (2 * this.getRadius());
 			if (((mxBall >= largex) && (mxBall <= largex + w)) && ((myBall >= largey) && (myBall <= largey + h))) {
 				this.panel.isPaused = true;
 			}
