@@ -4,7 +4,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 public class RedBall extends Thread {
-
+	
 	private GamePanel panel;
 	private Image ballImage;
 	private int x, y, size, a, b;
@@ -102,6 +102,7 @@ public class RedBall extends Thread {
 			int h = ((int) (player.getHeight() * 0.8)) + (2 * this.getRadius());
 			if (((mxBall >= largex) && (mxBall <= largex + w)) && ((myBall >= largey) && (myBall <= largey + h))) {
 				this.panel.isPaused = true;
+				player.setLives(player.getLives() - 1);;
 			}
 		}
 	}

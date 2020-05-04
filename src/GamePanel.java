@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel {
 
 	final int FRAME_SIZE = 30;
+	final int BALL_SIZES[] = {10, 25, 50, 100, 200, 400};
 
 	public BubblePlayer player;
 	public List<RedBall> redBalls = new ArrayList<RedBall>();
@@ -45,32 +46,37 @@ public class GamePanel extends JPanel {
 		level = 1;
 		isPaused = false;
 
-		player = new BubblePlayer(this);
-		for (int i = 0; i < level; i++) {
-			int x = FRAME_SIZE;
-			if (i % 2 == 0)
-				x += getWidth();
-			redBalls.add(new RedBall(this, x, 230, level * 25, true));
-		}
-
+		player = new BubblePlayer(this, 3);
+		addBalls();
+		
 		addKeyListener(new KL(this));
 		setFocusable(true);
 	}
-
-	public void startOver() {
-		isPaused = false;
-		redBalls.clear();
-		bow = null;
-		for (int i = 0; i < 2; i++) {
+	
+	public void addBalls() {
+		for (int i = 0; i < (level > 1 ? 2 : 1); i++) {
 			int x = FRAME_SIZE;
 			if (i % 2 == 0)
 				x += getWidth();
-			redBalls.add(new RedBall(this, x, 230, level * 25, true));
+			redBalls.add(new RedBall(this, x, 230, BALL_SIZES[level], true));
 		}
+	}
+
+	public void startOver() {
+		if (player.getLives() == 0) {
+			level = 1;
+			player.setLives(3);
+		}
+		
+		isPaused = false;
+		redBalls.clear();
+		bow = null;
+		addBalls();
 		synchronized (player) {
 			player.notify();
-			player = new BubblePlayer(this);
+			player = new BubblePlayer(this, player.getLives());
 		}
+		
 	}
 
 	public void levelUp() {
@@ -89,9 +95,14 @@ public class GamePanel extends JPanel {
 		super.paintComponent(g);
 		g.drawImage(backGroundImage, 0, 0, width, height, null);
 
+		// level
 		g.setFont(new Font("TimesRoman", Font.BOLD, 30));
 		g.setColor(Color.yellow);
 		g.drawString("Level:" + level, 50, 70);
+		
+		// lives
+		g.setColor(Color.red);
+		g.drawString("lives:" + player.getLives(), getWidth() - 150, 70);
 
 		// draw the bow and the player again
 		if (bow != null && bow.isAlive()) {
@@ -160,6 +171,7 @@ public class GamePanel extends JPanel {
 					break;
 				case KeyEvent.VK_ENTER:
 					if (this.panel.isPaused) {
+						// level = 1;
 						startOver();
 					}
 				default:

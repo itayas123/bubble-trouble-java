@@ -9,14 +9,15 @@ public class BubblePlayer extends Thread {
 
 	private GamePanel panel;
 	private Image playerImage;
-	private int x, y, width, height;
+	private int x, y, width, height, lives;
 	private ImageIcon B, L, R;
 	private boolean moveLeft, moveRight;
 
-	public BubblePlayer(GamePanel panel) {
+	public BubblePlayer(GamePanel panel, int lives) {
 		this.panel = panel;
 		this.height = 100;
 		this.width = 80;
+		this.lives = lives;
 		this.moveLeft = this.moveRight = false;
 		this.x = (panel.getWidth() / 2) - this.width + 50;
 		this.y = panel.getHeight() - this.height - panel.FRAME_SIZE;
@@ -98,5 +99,14 @@ public class BubblePlayer extends Thread {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+	
+
+	public int getLives() {
+		return lives;
+	}
+
+	public void setLives(int lives) {
+		this.lives = lives;
 	}
 }
