@@ -11,14 +11,15 @@ public class BubblePlayer extends Thread {
 	private Image playerImage;
 	private int x, y, width, height, lives;
 	private ImageIcon B, L, R;
-	private boolean moveLeft, moveRight;
+	private boolean moveLeft, moveRight, checkCollision;
 
-	public BubblePlayer(GamePanel panel, int lives) {
+	public BubblePlayer(GamePanel panel, int lives, boolean checkCollision) {
 		this.panel = panel;
 		this.height = 100;
 		this.width = 80;
 		this.lives = lives;
 		this.moveLeft = this.moveRight = false;
+		this.checkCollision = checkCollision;
 		this.x = (panel.getWidth() / 2) - this.width + 50;
 		this.y = panel.getHeight() - this.height - panel.FRAME_SIZE;
 		this.B = new ImageIcon("images/Man_B.png");
@@ -108,5 +109,13 @@ public class BubblePlayer extends Thread {
 
 	public void setLives(int lives) {
 		this.lives = lives;
+	}
+
+	public boolean checkCollision() {
+		return checkCollision;
+	}
+
+	public void setCheckCollision(boolean checkCollision) {
+		this.checkCollision = checkCollision;
 	}
 }

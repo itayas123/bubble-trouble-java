@@ -46,7 +46,7 @@ public class GamePanel extends JPanel {
 		level = 1;
 		isPaused = false;
 
-		player = new BubblePlayer(this, 3);
+		player = new BubblePlayer(this, 3, true);
 		addBalls();
 		
 		addKeyListener(new KL(this));
@@ -74,7 +74,7 @@ public class GamePanel extends JPanel {
 		addBalls();
 		synchronized (player) {
 			player.notify();
-			player = new BubblePlayer(this, player.getLives());
+			player = new BubblePlayer(this, player.getLives(), player.checkCollision());
 		}
 		
 	}
@@ -102,7 +102,7 @@ public class GamePanel extends JPanel {
 		
 		// lives
 		g.setColor(Color.red);
-		g.drawString("lives:" + player.getLives(), getWidth() - 150, 70);
+		g.drawString("lives:" + player.getLives(), getWidth() - 175, 70);
 
 		// draw the bow and the player again
 		if (bow != null && bow.isAlive()) {
@@ -111,7 +111,7 @@ public class GamePanel extends JPanel {
 
 		// draw the player
 		player.draw(g);
-
+		
 		int counter = 0;
 		// draw the balls that alive
 		for (int i = 0; i < redBalls.size(); i++) {
@@ -121,7 +121,10 @@ public class GamePanel extends JPanel {
 				counter++;
 			}
 		}
-
+		
+		if(isPaused  && player.getLives() == 0) {
+			g.drawImage((new ImageIcon("images/GameOver.png")).getImage(), (getWidth()/2) -250, (getHeight()/2) -250, 500, 500, null);
+		}
 		if (counter == 0) {
 			levelUp();
 		}
@@ -163,17 +166,24 @@ public class GamePanel extends JPanel {
 					player.setMoveRight(true);
 					break;
 				case KeyEvent.VK_SPACE:
-					if (bow == null || (bow != null && !bow.isAlive()))
-						bow = new Bow(this.panel, player);
+					if (bow != null && bow.isAlive()) {
+						bow.doBreak = true;
+					}
+					bow = new Bow(this.panel, player);
 					break;
 				case KeyEvent.VK_ESCAPE:
 					jf.dispatchEvent(new WindowEvent(jf, WindowEvent.WINDOW_CLOSING));
 					break;
 				case KeyEvent.VK_ENTER:
 					if (this.panel.isPaused) {
-						// level = 1;
 						startOver();
 					}
+					break;
+				case KeyEvent.VK_L:
+					player.setLives(999);
+					break;
+				case KeyEvent.VK_C:
+					player.setCheckCollision(false);
 				default:
 					break;
 			}

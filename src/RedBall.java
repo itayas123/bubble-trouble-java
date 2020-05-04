@@ -93,7 +93,7 @@ public class RedBall extends Thread {
 
 	public void playerCollision() {
 		BubblePlayer player = this.panel.player;
-		if (player != null && player.isAlive()) {
+		if (player != null && player.isAlive() && player.checkCollision()) {
 			int mxBall = this.getMiddleX();
 			int myBall = this.getMiddleY();
 			int largex = player.getX() - this.getRadius();
