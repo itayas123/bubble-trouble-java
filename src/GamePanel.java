@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel {
 
 	final int FRAME_SIZE = 30;
-	final int BALL_SIZES[] = {10, 25, 50, 100, 200, 400};
+	final int BALL_SIZES[] = {10, 25, 50, 100, 200, 300};
 
 	public BubblePlayer player;
 	public List<RedBall> redBalls = new ArrayList<RedBall>();
@@ -78,16 +78,36 @@ public class GamePanel extends JPanel {
 		}
 		
 	}
+	
+	public void continuePlay() {
+		isPaused = false;
+		synchronized (player) {
+			player.notify();
+		}
+		if (bow != null && bow.isAlive()) {
+			synchronized (bow) {
+				bow.notify();
+			}
+		}
+		for (RedBall ball : redBalls) {
+			synchronized (ball) {
+				ball.notify();
+			}
+		}
+		
+	}
 
 	public void levelUp() {
-		level++;
-		isPaused = true;
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		if (level < BALL_SIZES.length - 1) {
+			level++;
+			isPaused = true;
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			startOver();
 		}
-		startOver();
 	}
 
 	public void paintComponent(Graphics g) {
@@ -181,6 +201,17 @@ public class GamePanel extends JPanel {
 					break;
 				case KeyEvent.VK_L:
 					player.setLives(999);
+					break;
+				case KeyEvent.VK_P:
+					if(isPaused) {
+						continuePlay();
+					} else {
+						isPaused = true;						
+					}
+					break;
+				case KeyEvent.VK_4:
+					level = 4;
+					startOver();
 					break;
 				case KeyEvent.VK_C:
 					player.setCheckCollision(false);

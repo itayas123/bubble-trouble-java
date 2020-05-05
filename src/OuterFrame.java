@@ -1,14 +1,8 @@
-import java.applet.Applet;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -38,7 +32,7 @@ public class OuterFrame extends JFrame {
 		this.setBackground(Color.red);
 		 outerFrame = this;
 		
-Outer_Background = new ImageIcon("images/OuterFrame.jpg");
+		Outer_Background = new ImageIcon("images/OuterFrame.jpg");
 		
 		Outer_Back = new JLabel(Outer_Background);
 		Outer_Back.setBounds(0 , 0, 1025, 770);
