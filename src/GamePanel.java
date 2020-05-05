@@ -205,18 +205,4 @@ public class GamePanel extends JPanel {
 		}
 	}
 
-	public static void main(String[] args) {
-		JFrame jframe = new JFrame("Bubble Trouble (c)");
-		GamePanel gp = new GamePanel(jframe);
-		jframe.setSize(gp.width, gp.height);
-		jframe.add(gp);
-		jframe.setUndecorated(true);
-		jframe.setLocationRelativeTo(null);
-		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		jframe.setResizable(false);
-		jframe.setVisible(true);
-		jframe.setFocusable(false);
-		gp.hideMouseCursor();
-
-	}
 }
