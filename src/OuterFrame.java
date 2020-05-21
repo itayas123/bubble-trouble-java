@@ -25,17 +25,15 @@ public class OuterFrame extends JFrame {
 	public OuterFrame(){
 		super("Bubble Trouble (c)");
 		this.setSize(1024, 768);
-		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		this.setFocusable(false);
-		this.setBackground(Color.red);
 		 outerFrame = this;
 		
 		Outer_Background = new ImageIcon("images/OuterFrame.jpg");
 		
 		Outer_Back = new JLabel(Outer_Background);
-		Outer_Back.setBounds(0 , 0, 1025, 770);
+		Outer_Back.setBounds(0 , 0, 1024, 768);
 		
 		
 		Font f = new Font("TimesRoman", Font.BOLD, 30);
