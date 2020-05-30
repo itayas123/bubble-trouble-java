@@ -13,6 +13,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -21,7 +22,7 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel {
 
 	final int FRAME_SIZE = 30;
-	final int BALL_SIZES[] = {10, 25, 50, 100, 200, 300};
+	final int BALL_SIZES[] = {10, 25, 50, 100, 200, 200};
 
 	public BubblePlayer player;
 	public List<RedBall> redBalls = new ArrayList<RedBall>();
@@ -56,9 +57,8 @@ public class GamePanel extends JPanel {
 	public void addBalls() {
 		for (int i = 0; i < (level > 1 ? 2 : 1); i++) {
 			int x = FRAME_SIZE;
-			if (i % 2 == 0)
-				x += getWidth();
-			redBalls.add(new RedBall(this, x, 230, BALL_SIZES[level], true));
+			int randomY = ThreadLocalRandom.current().nextInt(120, getHeight() - 220);
+			redBalls.add(new RedBall(this, i % 2 == 0 ? x + getWidth() : x, randomY, BALL_SIZES[level], true));
 		}
 	}
 
@@ -145,6 +145,7 @@ public class GamePanel extends JPanel {
 		if(isPaused  && player.getLives() == 0) {
 			g.drawImage((new ImageIcon("images/GameOver.png")).getImage(), (getWidth()/2) -250, (getHeight()/2) -250, 500, 500, null);
 		}
+		
 		if (counter == 0) {
 			levelUp();
 		}
@@ -213,8 +214,12 @@ public class GamePanel extends JPanel {
 					level = 4;
 					startOver();
 					break;
+				case KeyEvent.VK_5:
+					level = 5;
+					startOver();
+					break;
 				case KeyEvent.VK_C:
-					player.setCheckCollision(false);
+					player.setCheckCollision(!player.checkCollision());
 				default:
 					break;
 			}
